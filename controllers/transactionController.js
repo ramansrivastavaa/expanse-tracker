@@ -1,5 +1,5 @@
 const BankTransaction = require("../models/Transaction");
-
+const { analyzeTransaction } = require("../deepseekModel");
 // Get transactions
 const getTransactions = async (req, res) => {
     try {
@@ -90,7 +90,8 @@ const getTransactions = async (req, res) => {
 const addTransaction = async (req, res) => {
     try {
         const { message } = req.body;
-
+        const transactionDetails = await analyzeTransaction(message);
+        console.log(transactionDetails);
         // Extract bank details and amount
         const { bankName, amount, transactionType } = await extractTransactionDetails(message);
 
@@ -115,6 +116,7 @@ const addTransaction = async (req, res) => {
 
 // Helper function to extract transaction details
 const extractTransactionDetails = async (message) => {
+  
   // Enhanced transaction type detection
   const creditKeywords = [
     "credited",
